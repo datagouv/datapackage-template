@@ -24,7 +24,7 @@ jobs:
     - name: Vérification du schéma table1 et des fichiers d'exemples associés
       run: |
         frictionless validate --type schema table1/schema.json
-        frictionless validate --schema table1/schema.json site/exemple-valide.csv
+        frictionless validate --schema table1/schema.json table1/exemple-valide.csv
     - name: Vérification du schéma table2 et des fichiers d'exemples associés
       run: |
         frictionless validate --type schema table2/schema.json
