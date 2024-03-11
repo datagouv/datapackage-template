@@ -2,7 +2,7 @@ import json
 import re
 import os
 
-pattern = r'v?\d+.\d+.\d+'
+pattern = r'v?\d+\.\d+\.\d+'
 
 
 def check(obj, version, parents=''):
@@ -14,10 +14,9 @@ def check(obj, version, parents=''):
     errors = []
     # if field is a string, we check for a potential version
     if isinstance(obj, str):
-        if homepage in obj:
-            tmp = re.search(pattern, obj)
-            if tmp and tmp[0] != version:
-                errors += [(parents, tmp[0])]
+        tmp = re.search(pattern, obj)
+        if tmp and tmp[0] != version:
+            errors += [(parents, tmp[0])]
     # if field is a list, we check every item
     elif isinstance(obj, list):
         for idx, k in enumerate(obj):
@@ -29,11 +28,13 @@ def check(obj, version, parents=''):
     # if field is a dict, we check every value
     elif isinstance(obj, dict):
         for k in obj:
-            errors += check(
-                obj[k],
-                version,
-                parents=parents + '.' + k if parents else k
-            )
+            # not checking the fields
+            if k != 'fields':
+                errors += check(
+                    obj[k],
+                    version,
+                    parents=parents + '.' + k if parents else k
+                )
     return errors
 
 
@@ -60,7 +61,7 @@ for schema_path in to_check:
     errors = check(schema, version)
     if errors:
         message = (
-            f"Errors are mismatched within the schema '{schema}', "
+            f"Versions are mismatched within the schema '{schema['name']}', "
             f"expected version {version} but:"
         )
         for e in errors:
