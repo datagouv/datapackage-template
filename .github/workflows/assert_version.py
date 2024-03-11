@@ -48,6 +48,9 @@ elif 'datapackage.json' in os.listdir():
     for r in datapackage['resources']:
         to_check.append(r['schema'])
 
+else:
+    raise Exception('No required file found')
+
 for schema_path in to_check:
     with open(schema_path, 'r') as f:
         schema = json.load(f)
