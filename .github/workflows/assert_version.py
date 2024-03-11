@@ -62,8 +62,8 @@ for schema_path in to_check:
     if errors:
         message = (
             f"Versions are mismatched within the schema '{schema['name']}', "
-            f"expected version {version} but:"
+            f"expected version '{version}' but:"
         )
         for e in errors:
-            message += f'\n- {e[0]} has version {e[1]}'
+            message += f"\n- {e[0]} has version '{e[1]}'"
         raise Exception(message)
