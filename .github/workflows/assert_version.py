@@ -52,6 +52,7 @@ elif 'datapackage.json' in os.listdir():
 else:
     raise Exception('No required file found')
 
+message = ''
 for schema_path in to_check:
     with open(schema_path, 'r') as f:
         schema = json.load(f)
@@ -60,10 +61,13 @@ for schema_path in to_check:
 
     errors = check(schema, version)
     if errors:
-        message = (
+        if message:
+            message += '\n\n'
+        message += (
             f"Versions are mismatched within the schema '{schema['name']}', "
             f"expected version '{version}' but:"
         )
         for e in errors:
             message += f"\n- {e[0]} has version '{e[1]}'"
-        raise Exception(message)
+if message:
+    raise Exception(message)
